@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity$PlaceholderFragment">
+
+    <ImageButton
+        android:id="@+id/btnDate"
+        android:layout_width="38sp"
+        android:layout_height="38sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/inpDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="23dp"
+        android:text=""
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/btnDate"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgFromTime"
+        android:layout_width="38sp"
+        android:layout_height="38sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <TextView
+        android:id="@+id/lblFromTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/fromTime"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imgFromTime"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <TextView
+        android:id="@+id/inpFromTime"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="26dp"
+        android:clickable="true"
+        android:text="09:00"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/lblFromTime"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <TextView
+        android:id="@+id/lblToTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/toTime"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/inpFromTime"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <TextView
+        android:id="@+id/inpToTime"
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="26dp"
+        android:text="10:00"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/lblToTime"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <TextView
+        android:id="@+id/lblClock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="26dp"
+        android:text="@string/clock"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/inpToTime"
+        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+
+    <ImageView
+        android:id="@+id/imgProject"
+        android:layout_width="38sp"
+        android:layout_height="38sp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_star"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgFromTime" />
+
+    <Spinner
+        android:id="@+id/spnProject"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="4dp"
+        android:spinnerMode="dialog"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddProject"
+        app:layout_constraintStart_toEndOf="@+id/imgProject"
+        app:layout_constraintTop_toBottomOf="@+id/imgFromTime" />
+
+    <ImageButton
+        android:id="@+id/btnAddProject"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="20dp"
+        android:background="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_plus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgFromTime" />
+
+    <EditText
+        android:id="@+id/inpDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="@string/description"
+        android:inputType="text"
+        android:isScrollContainer="false"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgProject" />
+
+    <Button
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inpDescription" />
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:text="@string/reset"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inpDescription" />
+
+</android.support.constraint.ConstraintLayout>

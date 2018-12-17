@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zeiterfassung</string>
+    <string name="date">Datum:</string>
+    <string name="fromTime">Von</string>
+    <string name="toTime">bis</string>
+    <string name="add">Hinzufügen</string>
+    <string name="show">Anzeigen</string>
+    <string name="reset">Zurücksetzen</string>
+    <string name="title_activity_main">Zeiterfassung</string>
+    <string name="how_to_exit">Nochmaliges Tippen beendet die App.</string>
+    <string name="clock">Uhr</string>
+    <string name="description">Beschreibung</string>
+    <string name="project">Projekt:</string>
+</resources>
