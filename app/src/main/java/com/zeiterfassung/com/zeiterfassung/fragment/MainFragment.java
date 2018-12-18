@@ -1,16 +1,18 @@
-package com.zeiterfassung;
+package com.zeiterfassung.com.zeiterfassung.fragment;
 
-public class MainFragment {
+import com.zeiterfassung.R;
+
+class MainFragment {
     private static final int count = 2;
 
-    public static int getCount()
+    static int getCount()
     {
         return count;
     }
 
-    public static int getResource(int section_number)
+    static int getResource(int section_number)
     {
-        int resource = 1;
+        int resource;
 
         switch(section_number)
         {
