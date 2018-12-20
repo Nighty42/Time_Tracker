@@ -1,46 +1,52 @@
 package com.zeiterfassung;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.app.TimePickerDialog;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Point;
+import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
-
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.ImageButton;
+import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.zeiterfassung.fragment.DatePickerFragment;
+import com.zeiterfassung.fragment.SectionsPagerAdapter;
+import com.zeiterfassung.fragment.TimePickerFragment;
+import com.zeiterfassung.manager.DimAmountManager;
+import com.zeiterfassung.model.Project;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
-                                                               TimePickerDialog.OnTimeSetListener
-{
-    static final DateFormat dateFormat = new SimpleDateFormat("EE, dd.MM.yyyy", Locale.GERMANY);
-    static final DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+public class MainActivity extends AppCompatActivity {
+    public static final DateFormat dateFormat = new SimpleDateFormat("EE, dd. MMMM yyyy", Locale.GERMANY);
+    public static final DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+
+    private PopupWindow popupWindow = null;
+    private EditText inpProject;
+
     boolean doubleBackToExitPressedOnce = false;
+
+    /*
+     * TODO:
+     * - Possibility to delete projects (maybe at long press on Item in Spinner)
+     * -
+     */
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -62,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Create the adapter that will return a fragment for each of the three
@@ -70,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -81,139 +87,78 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
         return true;
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            int resource = MainFragment.getResource(getArguments().getInt(ARG_SECTION_NUMBER));
-            return inflater.inflate(resource, container, false);
-        }
-
-        @Override
-        public void onViewCreated(View view, Bundle savedInstanceState){
-            TextView textView = getActivity().findViewById(R.id.inpDate);
-            textView.setText(dateFormat.format(new Date()));
-
-            TextView inpDate = getActivity().findViewById(R.id.inpDate);
-            inpDate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DatePickerFragment fragment = new DatePickerFragment();
-                    fragment.show(getActivity().getSupportFragmentManager(), "date");
-                }
-            });
-
-            // TODO: Differentiate caller
-
-            TextView inpFromTime = getActivity().findViewById(R.id.inpFromTime);
-            inpFromTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TimePickerFragment fragment = new TimePickerFragment();
-                    fragment.show(getActivity().getSupportFragmentManager(), "time");
-                }
-            });
-
-            TextView inpToTime = getActivity().findViewById(R.id.inpToTime);
-            inpToTime.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TimePickerFragment fragment = new TimePickerFragment();
-                    fragment.show(getActivity().getSupportFragmentManager(), "time");
-                }
-            });
-
-            // Get reference of widgets from XML layout
-            Spinner spinner = (Spinner) getActivity().findViewById(R.id.spnProject);
-
-            // Initializing a String Array
-            String[] projects = new String[]{
-                    "INTORQ",
-                    "Ford",
-                    "Mennekes",
-                    "MFS-Standard"
-            };
-
-            // Initializing an ArrayAdapter
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
-                    getActivity(), R.layout.spinner_item, projects
-            );
-            spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
-            spinner.setAdapter(spinnerArrayAdapter);
-
-            getActivity().findViewById(R.id.btnAddProject).setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // TODO: PopUp with Input for new Project Name
-                }
-            });
-        }
+    public void onClickInpDate(View v) {
+        DatePickerFragment fragment = DatePickerFragment.newInstance(findViewById(R.id.inpDate).getId());
+        fragment.show(getSupportFragmentManager(), "date");
     }
 
-    /***********************************************************************************************
-     * DatePicker
-     **********************************************************************************************/
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int day) {
-        Calendar calendar = new GregorianCalendar(year, month, day);
-        Date date = calendar.getTime();
-        setDate(date);
+    public void onClickInpFromTime(View v) {
+        TimePickerFragment fragment = TimePickerFragment.newInstance(findViewById(R.id.inpFromTime).getId());
+        fragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-    private void setDate(final Date date) {
-        ((TextView) findViewById(R.id.inpDate)).setText(dateFormat.format(date));
+    public void onClickInpToTime(View v) {
+        TimePickerFragment fragment = TimePickerFragment.newInstance(findViewById(R.id.inpToTime).getId());
+        fragment.show(getSupportFragmentManager(), "timePicker");
     }
 
-    /***********************************************************************************************
-     * TimePicker
-     **********************************************************************************************/
+    public void onClickBtnAddProjectPopUp(View v) {
+        LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.popup_add_project, null);
 
-    @Override
-    public void onTimeSet(TimePicker view, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MINUTE, minute);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        setTime(view, calendar);
+        inpProject = popupView.findViewById(R.id.inpProject);
+        inpProject.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+
+                switch (actionId) {
+                    case EditorInfo.IME_ACTION_SEND:
+                    case EditorInfo.IME_ACTION_DONE:
+                        onClickAddProject(v);
+                        handled = true;
+                        break;
+                }
+
+                return handled;
+            }
+        });
+
+        popupWindow = new PopupWindow(popupView,
+                ViewPager.LayoutParams.WRAP_CONTENT, ViewPager.LayoutParams.WRAP_CONTENT, true);
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        popupWindow.setWidth(size.x - 50);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, -30);
+
+        DimAmountManager.dim(popupWindow);
     }
 
-    private void setTime(final View view, final Calendar calendar) {
-        TextView textView = findViewById(R.id.inpFromTime);
+    public void onClickAddProject(View v) {
+        String item = inpProject.getText().toString();
+        String errorCode = Project.addItem(item);
 
-        switch(view.getId())
-        {
-            case R.id.inpToTime:
-                textView = findViewById(R.id.inpToTime);
-                break;
-            default:
-                textView = findViewById(R.id.inpFromTime);
-                break;
+        if (errorCode.equals(ErrorCode.OK)) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    R.layout.spinner_item, Project.getList());
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+            Spinner spinner = findViewById(R.id.spnProject);
+            spinner.setAdapter(adapter);
+            spinner.setSelection(Project.getIndexOfItem(item));
+            spinner.setClickable(true);
+
+            popupWindow.dismiss();
+        } else {
+            inpProject.setText("");
+            inpProject.setHint(getResources().getText(getResources().getIdentifier(errorCode,
+                    "string", "com.zeiterfassung")));
         }
-
-        textView.setText(timeFormat.format(calendar.getTime()));
     }
 
     /***********************************************************************************************
@@ -234,8 +179,19 @@ public class MainActivity extends AppCompatActivity implements DatePickerDialog.
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
+    }
+
+    /***********************************************************************************************
+     * EXIT
+     **********************************************************************************************/
+
+    @Override
+    protected void onDestroy() {
+        // FileManager.write(this);
+
+        super.onDestroy();
     }
 }

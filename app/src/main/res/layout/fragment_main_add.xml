@@ -5,20 +5,20 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity$PlaceholderFragment">
+    tools:context=".MainActivity">
 
-    <ImageButton
+    <ImageView
         android:id="@+id/btnDate"
         android:layout_width="38sp"
         android:layout_height="38sp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:clickable="true"
         android:background="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_calendar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/date" />
 
     <TextView
         android:id="@+id/inpDate"
@@ -27,6 +27,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="23dp"
         android:text=""
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClickInpDate"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/btnDate"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,7 +44,8 @@
         android:scaleType="fitCenter"
         android:src="@drawable/ic_time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDate" />
+        app:layout_constraintTop_toBottomOf="@+id/btnDate"
+        android:contentDescription="@string/defaultFromTime" />
 
     <TextView
         android:id="@+id/lblFromTime"
@@ -62,7 +66,9 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="26dp"
         android:clickable="true"
-        android:text="09:00"
+        android:focusable="true"
+        android:onClick="onClickInpFromTime"
+        android:text="@string/defaultFromTime"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/lblFromTime"
@@ -86,9 +92,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="26dp"
-        android:text="10:00"
+        android:text="@string/defaultToTime"
         android:textAlignment="center"
         android:textSize="20sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClickInpToTime"
         app:layout_constraintStart_toEndOf="@+id/lblToTime"
         app:layout_constraintTop_toBottomOf="@+id/btnDate" />
 
@@ -113,6 +122,7 @@
         android:background="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_star"
+        android:contentDescription="@string/project"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgFromTime" />
 
@@ -137,6 +147,10 @@
         android:background="@null"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_plus"
+        android:contentDescription="@string/addProject"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClickBtnAddProjectPopUp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgFromTime" />
 
@@ -157,7 +171,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgProject" />
+        app:layout_constraintTop_toBottomOf="@+id/imgProject"
+        tools:ignore="Autofill" />
 
     <Button
         android:id="@+id/btnAdd"

@@ -12,4 +12,10 @@
     <string name="clock">Uhr</string>
     <string name="description">Beschreibung</string>
     <string name="project">Projekt:</string>
+    <string name="addProject">Projektname</string>
+    <string name="defaultFromTime">09:00</string>
+    <string name="defaultToTime">10:00</string>
+
+    <string name="ecEmptyInput">Please insert something.</string>
+    <string name="ecDuplicate">Input is already existent.</string>
 </resources>
