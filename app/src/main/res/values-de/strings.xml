@@ -16,6 +16,7 @@
     <string name="defaultFromTime">09:00</string>
     <string name="defaultToTime">10:00</string>
 
-    <string name="ecEmptyInput">Please insert something.</string>
-    <string name="ecDuplicate">Input is already existent.</string>
+    <string name="ecEmptySpinner">Bitte erstelle ein Projekt.</string>
+    <string name="ecEmptyInput">Bitte gib etwas ein.</string>
+    <string name="ecDuplicate">Eingabe existiert bereits.</string>
 </resources>

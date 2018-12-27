@@ -31,6 +31,7 @@ import com.zeiterfassung.model.Project;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private PopupWindow popupWindow = null;
     private EditText inpProject;
 
-    boolean doubleBackToExitPressedOnce = false;
+    private boolean doubleBackToExitPressedOnce = false;
 
     /*
      * TODO:
@@ -102,8 +103,12 @@ public class MainActivity extends AppCompatActivity {
         fragment.show(getSupportFragmentManager(), "timePicker");
     }
 
+    public void onClickBtnAddProject(View v) {
+        addProject();
+    }
+
     public void onClickBtnAddProjectPopUp(View v) {
-        LayoutInflater inflater = (LayoutInflater) MainActivity.this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         @SuppressLint("InflateParams") View popupView = inflater.inflate(R.layout.popup_add_project, null);
 
         inpProject = popupView.findViewById(R.id.inpProject);
@@ -115,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (actionId) {
                     case EditorInfo.IME_ACTION_SEND:
                     case EditorInfo.IME_ACTION_DONE:
-                        onClickAddProject(v);
+                        addProject();
                         handled = true;
                         break;
                 }
@@ -139,14 +144,14 @@ public class MainActivity extends AppCompatActivity {
         DimAmountManager.dim(popupWindow);
     }
 
-    public void onClickAddProject(View v) {
+    private void addProject() {
         String item = inpProject.getText().toString();
         String errorCode = Project.addItem(item);
 
         if (errorCode.equals(ErrorCode.OK)) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                     R.layout.spinner_item, Project.getList());
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
             Spinner spinner = findViewById(R.id.spnProject);
             spinner.setAdapter(adapter);
@@ -159,6 +164,51 @@ public class MainActivity extends AppCompatActivity {
             inpProject.setHint(getResources().getText(getResources().getIdentifier(errorCode,
                     "string", "com.zeiterfassung")));
         }
+    }
+
+    public void onClickBtnDelProject(View v) {
+        delProject();
+    }
+
+    private void delProject() {
+        Spinner spinner = findViewById(R.id.spnProject);
+
+        Project.delItem((String) spinner.getSelectedItem());
+
+        if (Project.getList().size() > 0) {
+            spinner.setClickable(true);
+        } else {
+            Project.addItem(Project.getDummyItem());
+            spinner.setClickable(false);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(App.getContext(),
+                R.layout.spinner_item, Project.getList());
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+
+        spinner.setAdapter(adapter);
+    }
+
+    public void onClickBtnAddTermin(View v) {
+        // TODO: Implement Logic
+    }
+
+    public void onClickBtnResetTermin(View v) {
+        resetAddFragment();
+    }
+
+    public void resetAddFragment() {
+        TextView textView = findViewById(R.id.inpDate);
+        textView.setText(MainActivity.dateFormat.format(new Date()));
+
+        textView = findViewById(R.id.inpFromTime);
+        textView.setText(getResources().getText(R.string.defaultFromTime));
+
+        textView = findViewById(R.id.inpToTime);
+        textView.setText(getResources().getText(R.string.defaultToTime));
+
+        textView = findViewById(R.id.inpDescription);
+        textView.setText("");
     }
 
     /***********************************************************************************************
