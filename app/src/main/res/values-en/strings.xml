@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Time Tracking</string>
+    <string name="app_name">Time Tracker</string>
     <string name="date">Date:</string>
     <string name="fromTime">From</string>
     <string name="toTime">to</string>
     <string name="add">Add</string>
     <string name="show">Show</string>
     <string name="reset">Reset</string>
-    <string name="title_activity_main">Time Tracking</string>
+    <string name="title_activity_main">Time Tracker</string>
     <string name="how_to_exit">Press \'BACK\' again to exit the app.</string>
     <string name="clock">O\'Clock</string>
     <string name="description">Description</string>

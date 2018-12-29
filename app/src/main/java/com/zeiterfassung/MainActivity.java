@@ -145,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addProject() {
-        String item = inpProject.getText().toString();
+        Project item = new Project(inpProject.getText().toString());
         String errorCode = Project.addItem(item);
 
         if (errorCode.equals(ErrorCode.OK)) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+            ArrayAdapter<Project> adapter = new ArrayAdapter<>(this,
                     R.layout.spinner_item, Project.getList());
             adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
     private void delProject() {
         Spinner spinner = findViewById(R.id.spnProject);
 
-        Project.delItem((String) spinner.getSelectedItem());
+        Project.delItem((Project) spinner.getSelectedItem());
 
         if (Project.getList().size() > 0) {
             spinner.setClickable(true);
@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             spinner.setClickable(false);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(App.getContext(),
+        ArrayAdapter<Project> adapter = new ArrayAdapter<>(App.getContext(),
                 R.layout.spinner_item, Project.getList());
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
 

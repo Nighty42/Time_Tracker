@@ -1,10 +1,14 @@
 package com.zeiterfassung.model;
 
+import android.support.annotation.NonNull;
+
+import com.zeiterfassung.MainActivity;
+
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Termin {
-    public static ArrayList<Termin> list = new ArrayList<>();
+public class Appointment {
+    private static ArrayList<Appointment> list = new ArrayList<>();
 
     private Date date;
     private Date fromTime;
@@ -12,12 +16,20 @@ public class Termin {
     private Project project;
     private String description;
 
-    public Termin(Date date, Date fromTime, Date toTime, Project project, String description) {
+    public Appointment(Date date, Date fromTime, Date toTime, Project project, String description) {
         this.date = date;
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.project = project;
         this.description = description;
+    }
+
+    public static ArrayList<Appointment> getList() {
+        return list;
+    }
+
+    public static void addItem(Appointment item) {
+        list.add(item);
     }
 
     public Date getDate() {
@@ -58,5 +70,20 @@ public class Termin {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Appointment)) {
+            return false;
+        }
+
+        return date.equals(((Appointment) obj).getDate());
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return MainActivity.dateFormat.format(getDate());
     }
 }

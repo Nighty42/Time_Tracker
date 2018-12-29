@@ -28,7 +28,7 @@ public class FileManager {
 
             while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
-                Project.addItem(line);
+                Project.addItem(new Project(line));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,8 +67,8 @@ public class FileManager {
             outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
             outputStreamWriter = new OutputStreamWriter(outputStream);
 
-            for (String item : Project.getList()) {
-                outputStreamWriter.append(item);
+            for (Project item : Project.getList()) {
+                outputStreamWriter.append(item.toString());
                 outputStreamWriter.append("\n\r");
             }
         } catch (Exception e) {
