@@ -57,22 +57,22 @@ public class ExpandableListDataPump {
         Appointment.addItem(ter);
 
         ArrayList<String> projects = new ArrayList<>();
-        Appointment tempTermin = null;
+        Appointment tempAppointment = null;
 
         for (int i = Appointment.getList().size() - 1; i >= 0; i--) {
-            Appointment termin = Appointment.getList().get(i);
+            Appointment appointment = Appointment.getList().get(i);
 
-            if (tempTermin != null && !termin.equals(tempTermin)) {
-                expandableListDetail.put(tempTermin.toString(), new ArrayList<>(projects));
+            if (tempAppointment != null && !appointment.equals(tempAppointment)) {
+                expandableListDetail.put(tempAppointment.toString(), new ArrayList<>(projects));
                 projects.clear();
             }
 
-            tempTermin = termin;
-            projects.add(tempTermin.getProject().toString());
+            tempAppointment = appointment;
+            projects.add(tempAppointment.getProject().toString());
         }
 
-        assert tempTermin != null;
-        expandableListDetail.put(tempTermin.toString(), projects);
+        assert tempAppointment != null;
+        expandableListDetail.put(tempAppointment.toString(), projects);
 
         return expandableListDetail;
     }
