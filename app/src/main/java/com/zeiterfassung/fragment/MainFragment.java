@@ -20,6 +20,7 @@ import com.zeiterfassung.R;
 import com.zeiterfassung.listview.CustomExpandableListAdapter;
 import com.zeiterfassung.listview.ExpandableListDataPump;
 import com.zeiterfassung.manager.FileManager;
+import com.zeiterfassung.model.Appointment;
 import com.zeiterfassung.model.Project;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class MainFragment extends Fragment {
     ExpandableListView expandableListView;
     ExpandableListAdapter expandableListAdapter;
     List<String> expandableListTitle;
-    HashMap<String, List<String>> expandableListDetail;
+    HashMap<String, List<Appointment>> expandableListDetail;
 
     public MainFragment() {
     }

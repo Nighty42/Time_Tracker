@@ -1,12 +1,28 @@
 package com.zeiterfassung.fragment;
 
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-    public SectionsPagerAdapter(FragmentManager fm) {
-        super(fm);
+    private Fragment mCurrentFragment;
+
+    public SectionsPagerAdapter(FragmentManager fragmentManager) {
+        super(fragmentManager);
+    }
+
+    public Fragment getCurrentFragment() {
+        return mCurrentFragment;
+    }
+
+    @Override
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+        if (getCurrentFragment() != object) {
+            mCurrentFragment = ((Fragment) object);
+        }
+        super.setPrimaryItem(container, position, object);
     }
 
     @Override

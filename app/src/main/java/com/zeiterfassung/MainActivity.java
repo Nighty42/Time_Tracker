@@ -33,6 +33,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     public static final DateFormat dateFormat = new SimpleDateFormat("EE, dd. MMMM yyyy", Locale.GERMANY);
@@ -45,8 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
     /*
      * TODO:
-     * - Possibility to delete projects (maybe at long press on Item in Spinner)
-     * -
+     * - Logging: // Log.i("MainActivity", "nothing on backstack, calling super");
      */
 
     /**
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = findViewById(R.id.container);
+        mViewPager = findViewById(R.id.fragment_main_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
@@ -217,21 +217,28 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            return;
+        switch (Objects.requireNonNull(mSectionsPagerAdapter.getCurrentFragment().getView()).getId()) {
+            case R.id.fragment_main_add:
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed();
+                    return;
+                }
+
+                this.doubleBackToExitPressedOnce = true;
+                Toast.makeText(this, R.string.how_to_exit, Toast.LENGTH_SHORT).show();
+
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+                break;
+            case R.id.fragment_main_show:
+                mViewPager.setCurrentItem(0);
+                break;
         }
-
-        this.doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, R.string.how_to_exit, Toast.LENGTH_SHORT).show();
-
-        new Handler().postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
     }
 
     /***********************************************************************************************

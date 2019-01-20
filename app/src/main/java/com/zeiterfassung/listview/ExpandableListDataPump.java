@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ExpandableListDataPump {
-    public static HashMap<String, List<String>> getData() {
-        HashMap<String, List<String>> expandableListDetail = new HashMap<>();
+    public static HashMap<String, List<Appointment>> getData() {
+        HashMap<String, List<Appointment>> expandableListDetail = new HashMap<>();
 
         Project.addItem(new Project("Project 1"));
         Project.addItem(new Project("Project 2"));
@@ -56,23 +56,24 @@ public class ExpandableListDataPump {
         ter = new Appointment(date, fromTime, toTime, Project.getList().get(1), "Test 3 Description");
         Appointment.addItem(ter);
 
-        ArrayList<String> projects = new ArrayList<>();
+        ArrayList<Appointment> appointments = new ArrayList<>();
         Appointment tempAppointment = null;
 
         for (int i = Appointment.getList().size() - 1; i >= 0; i--) {
             Appointment appointment = Appointment.getList().get(i);
 
             if (tempAppointment != null && !appointment.equals(tempAppointment)) {
-                expandableListDetail.put(tempAppointment.toString(), new ArrayList<>(projects));
-                projects.clear();
+                expandableListDetail.put(tempAppointment.toString(), new ArrayList<>(appointments));
+                appointments.clear();
             }
 
             tempAppointment = appointment;
-            projects.add(tempAppointment.getProject().toString());
+            appointments.add(tempAppointment);
         }
 
         assert tempAppointment != null;
-        expandableListDetail.put(tempAppointment.toString(), projects);
+        expandableListDetail.put(tempAppointment.toString(), appointments);
+        // TODO: Sort expandableListDetail by Date ascending
 
         return expandableListDetail;
     }

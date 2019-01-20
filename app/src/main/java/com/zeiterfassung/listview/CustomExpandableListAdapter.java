@@ -11,6 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.zeiterfassung.R;
+import com.zeiterfassung.model.Appointment;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,10 +21,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
     private List<String> expandableListTitle;
-    private HashMap<String, List<String>> expandableListDetail;
+    private HashMap<String, List<Appointment>> expandableListDetail;
 
     public CustomExpandableListAdapter(Context context, List<String> expandableListTitle,
-                                       HashMap<String, List<String>> expandableListDetail) {
+                                       HashMap<String, List<Appointment>> expandableListDetail) {
         this.context = context;
         this.expandableListTitle = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
@@ -44,15 +45,25 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int listPosition, final int expandedListPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
-        final String expandedListText = (String) getChild(listPosition, expandedListPosition);
+
+        Appointment appointment = ((Appointment) getChild(listPosition, expandedListPosition));
+        final String expandedListItemText = appointment.getProject().toString();
+        final String expandedListSubItemText = appointment.getDescription();
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_item, null);
         }
-        TextView expandedListTextView = convertView
+
+        TextView expandedListItemTextView = convertView
                 .findViewById(R.id.expandedListItem);
-        expandedListTextView.setText(expandedListText);
+        expandedListItemTextView.setText(expandedListItemText);
+
+        TextView expandedListSubItemTextView = convertView
+                .findViewById(R.id.expandedListSubItem);
+        expandedListSubItemTextView.setText(expandedListSubItemText);
+
         return convertView;
     }
 
