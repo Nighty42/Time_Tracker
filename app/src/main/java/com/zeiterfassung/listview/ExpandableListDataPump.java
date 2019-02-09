@@ -1,6 +1,7 @@
 package com.zeiterfassung.listview;
 
 import com.zeiterfassung.model.Appointment;
+import com.zeiterfassung.model.AppointmentType;
 import com.zeiterfassung.model.Project;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class ExpandableListDataPump {
 
         Date toTime = cal.getTime();
 
-        Appointment ter = new Appointment(date, fromTime, toTime, Project.getList().get(0), "Test 1 Description");
+        Appointment ter = new Appointment(date, fromTime, toTime, Project.getList().get(0), new AppointmentType("D"), "Test 1 Description");
         Appointment.addItem(ter);
 
         cal.set(2018, Calendar.DECEMBER, 27, 8, 0, 0);
@@ -40,7 +41,7 @@ public class ExpandableListDataPump {
 
         toTime = cal.getTime();
 
-        ter = new Appointment(date, fromTime, toTime, Project.getList().get(1), "Test 2 Description");
+        ter = new Appointment(date, fromTime, toTime, Project.getList().get(1), new AppointmentType("D"), "Test 2 Description");
         Appointment.addItem(ter);
 
         cal.set(Calendar.HOUR_OF_DAY, 13);
@@ -53,7 +54,7 @@ public class ExpandableListDataPump {
 
         toTime = cal.getTime();
 
-        ter = new Appointment(date, fromTime, toTime, Project.getList().get(1), "Test 3 Description");
+        ter = new Appointment(date, fromTime, toTime, Project.getList().get(1), new AppointmentType("D"), "Test 3 Description");
         Appointment.addItem(ter);
 
         ArrayList<Appointment> appointments = new ArrayList<>();

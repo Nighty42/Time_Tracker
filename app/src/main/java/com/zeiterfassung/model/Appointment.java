@@ -14,13 +14,15 @@ public class Appointment {
     private Date fromTime;
     private Date toTime;
     private Project project;
+    private AppointmentType appointmentType;
     private String description;
 
-    public Appointment(Date date, Date fromTime, Date toTime, Project project, String description) {
+    public Appointment(Date date, Date fromTime, Date toTime, Project project, AppointmentType appointmentType, String description) {
         this.date = date;
         this.fromTime = fromTime;
         this.toTime = toTime;
         this.project = project;
+        this.appointmentType = appointmentType;
         this.description = description;
     }
 
@@ -62,6 +64,14 @@ public class Appointment {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public AppointmentType getAppointmentType() {
+        return appointmentType;
+    }
+
+    public void setAppointmentType(AppointmentType appointmentType) {
+        this.appointmentType = appointmentType;
     }
 
     public String getDescription() {

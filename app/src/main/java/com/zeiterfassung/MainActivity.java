@@ -27,6 +27,7 @@ import com.zeiterfassung.fragment.DatePickerFragment;
 import com.zeiterfassung.fragment.SectionsPagerAdapter;
 import com.zeiterfassung.fragment.TimePickerFragment;
 import com.zeiterfassung.manager.DimAmountManager;
+import com.zeiterfassung.manager.FileManager;
 import com.zeiterfassung.model.Project;
 
 import java.text.DateFormat;
@@ -43,11 +44,6 @@ public class MainActivity extends AppCompatActivity {
     private EditText inpProject;
 
     private boolean doubleBackToExitPressedOnce = false;
-
-    /*
-     * TODO:
-     * - Logging: // Log.i("MainActivity", "nothing on backstack, calling super");
-     */
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -68,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FileManager.read(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -247,7 +245,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        // FileManager.write(this);
+        FileManager.writeXML(this);
+        FileManager.readXML(this);
 
         super.onDestroy();
     }
