@@ -26,19 +26,16 @@ import android.widget.Toast;
 import com.zeiterfassung.fragment.DatePickerFragment;
 import com.zeiterfassung.fragment.SectionsPagerAdapter;
 import com.zeiterfassung.fragment.TimePickerFragment;
+import com.zeiterfassung.manager.DateTimeManager;
 import com.zeiterfassung.manager.DimAmountManager;
 import com.zeiterfassung.manager.FileManager;
 import com.zeiterfassung.model.Project;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    public static final DateFormat dateFormat = new SimpleDateFormat("EE, dd. MMMM yyyy", Locale.GERMANY);
-    public static final DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.GERMANY);
+
 
     private PopupWindow popupWindow = null;
     private EditText inpProject;
@@ -64,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FileManager.read(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -153,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
             Spinner spinner = findViewById(R.id.spnProject);
             spinner.setAdapter(adapter);
-            spinner.setSelection(Project.getIndexOfItem(item));
+            spinner.setSelection(Project.getList().indexOf(item));
             spinner.setClickable(true);
 
             popupWindow.dismiss();
@@ -197,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void resetAddFragment() {
         TextView textView = findViewById(R.id.inpDate);
-        textView.setText(MainActivity.dateFormat.format(new Date()));
+        textView.setText(DateTimeManager.dateToString(new Date()));
 
         textView = findViewById(R.id.inpFromTime);
         textView.setText(getResources().getText(R.string.defaultFromTime));

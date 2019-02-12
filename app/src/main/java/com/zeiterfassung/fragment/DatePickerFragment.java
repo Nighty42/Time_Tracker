@@ -3,12 +3,13 @@ package com.zeiterfassung.fragment;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
 import android.widget.TextView;
 
-import com.zeiterfassung.MainActivity;
 import com.zeiterfassung.R;
+import com.zeiterfassung.manager.DateTimeManager;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,6 +27,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         return fragment;
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         int year = calendar.get(Calendar.YEAR);
@@ -40,6 +42,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
             e.printStackTrace();
         }
 
+        //noinspection ConstantConditions
         return datePickerDialog;
     }
 
@@ -52,7 +55,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     private void setDate(final Date date) {
         try {
-            ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.inpDate)).setText(MainActivity.dateFormat.format(date));
+            ((TextView) Objects.requireNonNull(getActivity()).findViewById(R.id.inpDate)).setText(DateTimeManager.dateToString(date));
         } catch (Exception e) {
             e.printStackTrace();
         }

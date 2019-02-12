@@ -2,7 +2,7 @@ package com.zeiterfassung.model;
 
 import android.support.annotation.NonNull;
 
-import com.zeiterfassung.MainActivity;
+import com.zeiterfassung.manager.DateTimeManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +94,6 @@ public class Appointment {
     @NonNull
     @Override
     public String toString() {
-        return MainActivity.dateFormat.format(getDate());
+        return DateTimeManager.dateToString(getDate());
     }
 }

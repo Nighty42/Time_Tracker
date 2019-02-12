@@ -46,10 +46,6 @@ public class Project {
         return errorCode;
     }
 
-    public static int getIndexOfItem(Project item) {
-        return list.indexOf(item);
-    }
-
     public static void delItem(Project item) {
         if (!item.equals(dummyItem)) {
             list.remove(item);
@@ -58,6 +54,10 @@ public class Project {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

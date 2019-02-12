@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Xml;
 
 import com.zeiterfassung.model.Appointment;
+import com.zeiterfassung.model.AppointmentType;
 import com.zeiterfassung.model.Project;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -11,128 +12,41 @@ import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Date;
 
 public class FileManager {
-    private static final String fileName = "test.csv";
     private static final String xmlFileName = "test.xml";
-
-    public static void read(Context context) {
-        FileInputStream fileInputStream = null;
-        InputStreamReader inputStreamReader = null;
-        BufferedReader bufferedReader = null;
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-
-        try {
-            fileInputStream = context.openFileInput(fileName);
-            inputStreamReader = new InputStreamReader(fileInputStream);
-            bufferedReader = new BufferedReader(inputStreamReader);
-
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-                Project.addItem(new Project(line));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (bufferedReader != null) {
-                    bufferedReader.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (inputStreamReader != null) {
-                    inputStreamReader.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (fileInputStream != null) {
-                    fileInputStream.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public static void write(Context context) {
-        FileOutputStream outputStream = null;
-        OutputStreamWriter outputStreamWriter = null;
-
-        try {
-            outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-            outputStreamWriter = new OutputStreamWriter(outputStream);
-
-            for (Project project : Project.getList()) {
-                outputStreamWriter.append(project.toString());
-                outputStreamWriter.append("\n\r");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (outputStreamWriter != null) {
-                    outputStreamWriter.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public static void readXML(Context context) {
         Exception exception = null;
 
-        FileInputStream inputStream = null;
-        InputStreamReader inputStreamReader = null;
-        XmlSerializer serializer = Xml.newSerializer();
+        FileInputStream fileInputStream = null;
         String xmlData = null;
 
-        try {
-            inputStream = context.openFileInput(xmlFileName);
-            inputStreamReader = new InputStreamReader(inputStream);
+        File file = new File(context.getFilesDir(), xmlFileName);
+        int length = (int) file.length();
+        byte[] bytes = new byte[length];
 
-            char[] buffer = new char[inputStream.available()];
-            // inputStreamReader.read(buffer);
-            xmlData = new String(buffer);
+        try {
+            fileInputStream = new FileInputStream(file);
+            //noinspection ResultOfMethodCallIgnored
+            fileInputStream.read(bytes);
+
+            xmlData = new String(bytes);
 
         } catch (Exception e) {
             e.printStackTrace();
             exception = e;
         } finally {
             try {
-                if (inputStreamReader != null) {
-                    inputStreamReader.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                exception = e;
-            }
-
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
+                if (fileInputStream != null) {
+                    fileInputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -157,6 +71,30 @@ public class FileManager {
                         System.out.println("Start document");
                     } else if (eventType == XmlPullParser.START_TAG) {
                         System.out.println("START_TAG: " + xmlPullParser.getName());
+
+                        switch (xmlPullParser.getName()) {
+                            case "appointment":
+                                try {
+                                    AppointmentType appointmentType = AppointmentType.createAndGet(xmlPullParser.getAttributeValue("", "appointmentType"));
+
+                                    Date date = DateTimeManager.stringToDate(xmlPullParser.getAttributeValue("", "date"));
+                                    Date fromTime = DateTimeManager.stringToTime(xmlPullParser.getAttributeValue("", "fromTime"));
+                                    Date toTime = DateTimeManager.stringToTime(xmlPullParser.getAttributeValue("", "toTime"));
+                                    Project project = Project.getList().get(Project.getList().indexOf(new Project(xmlPullParser.getAttributeValue("", "project"))));
+                                    String description = xmlPullParser.getAttributeValue("", "description");
+
+                                    Appointment appointment = new Appointment(date, fromTime, toTime, project, appointmentType, description);
+                                    Appointment.addItem(appointment);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            case "project":
+                                Project project = new Project(xmlPullParser.getAttributeValue("", "name"));
+                                Project.getList().add(project);
+                                break;
+                        }
+
                     } else if (eventType == XmlPullParser.END_TAG) {
                         System.out.println("END_TAG: " + xmlPullParser.getName());
                     }
@@ -174,14 +112,13 @@ public class FileManager {
 
     public static void writeXML(Context context) {
         FileOutputStream outputStream = null;
-        OutputStreamWriter outputStreamWriter = null;
+        StringWriter stringWriter = new StringWriter();
         XmlSerializer serializer = Xml.newSerializer();
 
         try {
             outputStream = context.openFileOutput(xmlFileName, Context.MODE_PRIVATE);
-            outputStreamWriter = new OutputStreamWriter(outputStream);
 
-            serializer.setOutput(outputStreamWriter);
+            serializer.setOutput(stringWriter);
             serializer.startDocument("UTF-8", true);
             serializer.startTag("", "timetracker");
             serializer.startTag("", "projects");
@@ -197,9 +134,9 @@ public class FileManager {
 
             for (Appointment appointment : Appointment.getList()) {
                 serializer.startTag("", "appointment");
-                serializer.attribute("", "date", String.valueOf(appointment.getDate()));
-                serializer.attribute("", "fromTime", String.valueOf(appointment.getFromTime()));
-                serializer.attribute("", "toTime", String.valueOf(appointment.getToTime()));
+                serializer.attribute("", "date", DateTimeManager.dateToString(appointment.getDate()));
+                serializer.attribute("", "fromTime", DateTimeManager.timeToString(appointment.getFromTime()));
+                serializer.attribute("", "toTime", DateTimeManager.timeToString(appointment.getToTime()));
                 serializer.attribute("", "project", String.valueOf(appointment.getProject().getName()));
                 serializer.attribute("", "appointmentType", String.valueOf(appointment.getAppointmentType().getId()));
                 serializer.attribute("", "description", String.valueOf(appointment.getDescription()));
@@ -211,23 +148,31 @@ public class FileManager {
             serializer.endDocument();
 
             serializer.flush();
+
+            String dataWrite = stringWriter.toString();
+            outputStream.write(dataWrite.getBytes());
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                if (outputStreamWriter != null) {
-                    outputStreamWriter.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             try {
                 if (outputStream != null) {
                     outputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public static void deleteXML(Context context) throws Exception {
+        File file = new File(context.getFilesDir(), xmlFileName);
+
+        if (file.exists()) {
+            boolean deleted = file.delete();
+
+            if (!deleted) {
+                throw new Exception("File could not be deleted.");
             }
         }
     }

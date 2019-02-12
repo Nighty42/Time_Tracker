@@ -14,12 +14,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.zeiterfassung.App;
-import com.zeiterfassung.MainActivity;
 import com.zeiterfassung.R;
 import com.zeiterfassung.listview.CustomExpandableListAdapter;
 import com.zeiterfassung.listview.ExpandableListDataPump;
-import com.zeiterfassung.manager.FileManager;
+import com.zeiterfassung.manager.DateTimeManager;
 import com.zeiterfassung.model.Appointment;
 import com.zeiterfassung.model.Project;
 
@@ -135,14 +133,12 @@ public class MainFragment extends Fragment {
                 case 1:
                     try {
                         TextView textView = Objects.requireNonNull(getActivity()).findViewById(R.id.inpDate);
-                        textView.setText(MainActivity.dateFormat.format(new Date()));
+                        textView.setText(DateTimeManager.dateToString(new Date()));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
                     Spinner spinner = getActivity().findViewById(R.id.spnProject);
-
-                    FileManager.read(App.getContext());
 
                     if (Project.getList().isEmpty()) {
                         Project.addItem(Project.getDummyItem());

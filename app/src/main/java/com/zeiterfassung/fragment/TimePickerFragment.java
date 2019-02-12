@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.zeiterfassung.MainActivity;
 import com.zeiterfassung.R;
+import com.zeiterfassung.manager.DateTimeManager;
 
 import java.util.Calendar;
 import java.util.Objects;
@@ -66,7 +66,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
                     break;
             }
 
-            textView.setText(MainActivity.timeFormat.format(calendar.getTime()));
+            textView.setText(DateTimeManager.timeToString(calendar.getTime()));
         } catch (Exception e) {
             e.printStackTrace();
         }
